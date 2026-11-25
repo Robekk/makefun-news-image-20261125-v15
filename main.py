@@ -51,7 +51,10 @@ def main() -> int:
             if not block:
                 break
             fout.write(block)
-    return 0 if same_bytes(src, dest) else 1
+    if not same_bytes(src, dest):
+        return 1
+    print(f"published {PAGE}: {os.path.getsize(dest)} bytes -> {dest}")
+    return 0
 
 
 if __name__ == "__main__":
