@@ -39,6 +39,17 @@ def same_bytes(first: str, second: str) -> bool:
                 return True
 
 
+def digest_of(path: str) -> str:
+    """SHA-256 of a file, read in blocks."""
+    import hashlib
+
+    hasher = hashlib.sha256()
+    with open(path, "rb") as fh:
+        for block in iter(lambda: fh.read(CHUNK), b""):
+            hasher.update(block)
+    return hasher.hexdigest()
+
+
 def main() -> int:
     here = os.path.dirname(os.path.abspath(__file__))
     src = os.path.join(here, PAGE)
@@ -54,6 +65,7 @@ def main() -> int:
     if not same_bytes(src, dest):
         return 1
     print(f"published {PAGE}: {os.path.getsize(dest)} bytes -> {dest}")
+    print(f"page sha256: {digest_of(dest)}")
     return 0
 
 
